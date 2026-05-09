@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ProperSett - Gym Trainer App</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+<style>
+:root {
+  --primary: #A813B7;
+  --secondary: #ffa502;
+  --accent: #3742fa;
+  --gradient: linear-gradient(135deg, #0f0a15 0%, #1a1423 50%, #151a36 100%);
+  --gradient-hero: linear-gradient(135deg, #F6CFFF 0%, #f3a8ff85 50%, #a913b77f 100%);
+  --text-light: #ffffff;
+  --text-dark: #f8f9fa;
+  --shadow: 0 20px 40px rgba(0,0,0,0.4);
+  --card-bg: #1e1e1e;
+  --accent-color: #A813B7;
+  --neutral-color: #C27AFF;
+  --perks-bg: #f7f7f7;
+  --heading-color: #111;
+  --subheading-color: #555;
+  --logo-text: #fff;
+}
+
+[data-theme="dark"] {
+  --accent-color: #A813B7;
+  --neutral-color: #C27AFF;
+  --perks-bg: #1a1a1a;
+  --heading-color: #fff;
+  --subheading-color: #aaa;
+  --logo-text: #fff;
+  --logo-gradient: linear-gradient(135deg, #F6CFFF 0%, #F4A8FF 50%, #A813B7 100%);
+}
+
+[data-theme="light"] {
+  --gradient: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 50%, #dee2e6 100%);
+  --gradient-hero: linear-gradient(135deg, #F6CFFF 0%, #F4A8FF 50%, #A813B7 100%);
+  --text-light: #1a1a1a;
+  --text-dark: #2c3e50;
+  --card-bg: #ffffff;
+  --logo-text: #111;
+  --logo-gradient: linear-gradient(135deg, #0A0A0A 0%, #4B004F 50%, #A813B7 100%);
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  background: var(--gradient);
+  color: var(--text-light);
+}
+
+header {
+  background: rgba(10,10,10,0.85);
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(20px);
+  box-shadow: var(--shadow);
+}
+  /* Apply smooth transition to all major sections */
+  body,
+  header,
+  .hero,
+  .section-title,
+  .feature-card,
+  .divider,
+  .membership-perks,
+  .cta-buttons .appstore,
+  .cta-buttons .playstore {
+    transition: all 0.7s ease;
+}
+
+[data-theme="light"] header { background: rgba(255,255,255,0.85); }
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logo-img {
+  height: 60px;
+  width: auto;
+  display: inline-block;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.logo-img:hover {
+  transform: scale(1.08);
+  opacity: 0.9;
+}
+
+/* Light mode: invert logo to white */
+[data-theme="light"] .logo-img {
+  filter: none;
+}
+/* Dark mode: keep original black logo */
+[data-theme="dark"] .logo-img {
+  filter: invert(1);
+}
+
+.brand-name {
+  font-size: 1.5rem;
+  font-weight: bold;
+  background: var(--logo-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+    nav {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+    }
+    nav a {
+      color: var(--text-light);
+      font-size: 1.5rem; /* icon size */
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem; /* spacing sa icon at word */
+      position: relative;
+    }
+      [data-theme="light"] nav a {
+      color: #000;
+    }
+    nav a .label {
+      font-size: 1rem;        /* readable font size */
+      opacity: 0;             /* hidden by default */
+      transform: translateX(10px); /* slight offset */
+      transition: opacity 0.3s, transform 0.3s;
+    }
+    nav a:hover .label {
+      opacity: 1;             /* show on hover */
+      transform: translateX(0); /* slide in */
+    }
+    nav a:hover {
+      color: var(--primary);  /* highlight color on hover */
+    }
+    nav a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -5px;
+      left: 0;
+      background: var(--primary);
+      transition: width 0.3s;
+    }
+    nav a:hover {
+      color: var(--primary);
+    }
+    nav a:hover::after {
+      width: 100%;
+    }
+    #theme-toggle {
+      background: transparent;
+      color: var(--text-light);  
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 0.5rem;
+      transition: transform 0.6s ease;
+    }
+    #theme-toggle:hover {
+      transform: scale(1.2) rotate(360deg);
+    }
+    .hero {
+      min-height: 100vh;
+      background: var(--gradient-hero);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+    }
+    .hero-content {
+      max-width: 700px;
+      padding: 0 2rem;
+      animation: heroSlide 1s ease-out;
+    }
+    .hero h1 {
+      font-size: clamp(3rem, 6vw, 5rem);
+      font-weight: 800;
+      margin-bottom: 1rem;
+      animation: shakeCute 1s infinite;
+    }
+    .hero .subtitle {
+      font-size: 1.3rem;
+      margin-bottom: 2rem;
+    }
+    .btn {
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      box-shadow: var(--shadow);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px rgba(255,255,255,0.6);
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      display: flex;
+      justify-content: center;  
+      align-items: center;       
+      padding: 0.8rem 1.6rem;    
+      border-radius: 50px;
+      position: relative;
+      overflow: hidden;
+      min-width: 160px;          
+      height: auto;             
+    }
+    .btn-primary .btn-text {
+      transition: opacity 0.3s;
+      font-size: 1rem;          
+    }
+    .btn-primary .btn-icon {
+      font-size: 1.4rem;        
+      opacity: 0;
+      position: absolute;
+      transition: opacity 0.3s, transform 0.3s;
+    }
+    .btn-primary:hover .btn-text {
+      opacity: 0; /* hide text */
+    } 
+
+    .btn-primary:hover .btn-icon {
+      opacity: 1; /* show icon */
+      transform: scale(1.1); /* slight pop-up effect */
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%) scale(1.1);
+    }
+    .btn-secondary { background: var(--secondary); color: #fff; }
+
+    /* Dark mode buttons */
+    [data-theme="dark"] .btn-primary {
+      background: #fff; 
+      color: var(--primary);  
+    }
+    [data-theme="dark"] .btn-secondary {
+      background: #333;       
+      color: #fff;           
+    }
+
+    /* Light mode buttons */
+    [data-theme="light"] .btn-primary {
+      background: var(--primary); 
+      color: #fff;                
+    }
+    [data-theme="light"] .btn-secondary {
+      background: #f8f9fa;        
+      color: #333;                
+    }
+
+    section { padding: 4rem 2rem; text-align: center; }
+    h2 { font-size: 2rem; margin-bottom: 1.5rem; }
+
+    .section-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 2rem;
+      display: inline-block;
+      background: linear-gradient(90deg, #4B004F, #F4A8FF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      position: relative;
+      animation: fadeSlideUp 1s ease forwards; /* fade + slide animation */
+    }
+
+    .section-title::after {
+      content: "";
+      display: block;
+      width: 100%;              
+      height: 3px;
+      margin-top: 0.5rem;
+      background: linear-gradient(90deg, #4B004F, #F4A8FF);
+      border-radius: 2px;
+    }
+    .features {
+      text-align: center;
+      margin: 3rem 0;
+    }
+    .feature-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      align-items: start;
+    }
+    .feature-card {
+      position: relative;
+      overflow: hidden;
+      height: 200px; 
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      border-radius: 15px;       
+    }
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+    .feature-card i {
+      margin-top: 1rem; 
+    }
+    .feature-card span {
+      margin-top: 0.5rem;
+    } 
+      /* hidden content */
+    .feature-content {
+      position: absolute;  
+      bottom: 0;
+      left: 0;
+      right: 0;
+      max-height: 0;
+      opacity: 0;
+      transition: max-height 0.5s ease, opacity 0.5s ease;
+      background: var(--card-bg); 
+      padding: 1rem;
+    }
+    /* hide checkbox */
+    .feature-card input[type="checkbox"] {
+      display: none;
+    }
+    /* kapag checked, magbubukas */
+    .feature-card input:checked ~ .feature-content {
+      max-height: 100px;
+      opacity: 1;
+    }
+    /* Accent colors */
+    .red i { color: #ff4757; }
+    .blue i { color: #1e90ff; }
+    .green i { color: #2ecc71; }
+    .purple i { color: #9b59b6; }
+
+    /* Animations per feature */
+    .red:hover i { animation: shake 0.6s; }
+    .blue:hover i { animation: rotate 0.8s linear; }
+    .green:hover i { animation: pulse 0.8s; }
+    .purple:hover i { animation: flip 0.8s; }
+
+    /* Divider line */
+    .divider {
+      height: 3px;
+      background: linear-gradient(to right, var(--accent-color), var(--neutral-color));
+      margin: 2rem auto;
+      width: 80%;
+    }
+
+    /* Membership perks section */
+    .membership-perks {
+      padding: 2rem;
+      text-align: center;
+      background: var(--gradient-hero);
+    }
+
+    /* Heading + subheading */
+    .membership-perks h2 {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: #F8FAFC;
+    }
+
+    .membership-perks p {
+      font-size: 1rem;
+      color: #F8FAFC;
+      margin-bottom: 2rem;
+    }
+    /* CTA buttons */
+    .cta-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+    }
+
+    .cta-buttons .appstore {
+      background: #A813B7;
+      color: #fff;
+      padding: 0.8rem 1.5rem;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .cta-buttons .playstore {
+      background: #fff;
+      color: #111;
+      padding: 0.8rem 1.5rem;
+      border: 1px solid #111;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    /* Hover effects for premium feel */
+    .cta-buttons button:hover {
+      transform: scale(1.05);
+    }
+
+    /* Animations */
+    @keyframes heroSlide { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes titlePulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.03); } }
+    @keyframes iconFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+    @keyframes logoBounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+    @keyframes shakeCute {
+    0% { transform: translateX(0); }
+    20% { transform: translateX(-3px) rotate(-2deg); }
+    40% { transform: translateX(3px) rotate(2deg); }
+    60% { transform: translateX(-2px) rotate(-1deg); }
+    80% { transform: translateX(2px) rotate(1deg); }
+    100% { transform: translateX(0); } }
+    /* Keyframes para sa features*/
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      25% { transform: translateX(-3px); }
+      50% { transform: translateX(3px); }
+      75% { transform: translateX(-2px); }
+    }
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    @keyframes pulse {
+      0%,100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+    @keyframes flip {
+      0% { transform: rotateY(0); }
+      100% { transform: rotateY(180deg); }
+    }
+
+</style>
+</head>
+  <body data-theme="dark">
+    <header>
+      <nav>
+        <div class="logo">
+        <img src="logo.png" alt="ProperSett Logo" class="logo-img">
+        <span class="brand-name">ProperSett</span>
+      </div>
+
+    <ul>
+      <li><a href="#home"><i class="fas fa-home"></i><span class="label">Home</span></a></li>
+      <li><a href="#features"><i class="fas fa-cogs"></i><span class="label">Features</span></a></li>
+      <li><a href="#gyms"><i class="fas fa-dumbbell"></i><span class="label">Gyms</span></a></li>
+      <li><a href="#cta"><i class="fas fa-download"></i><span class="label">Download</span></a></li>
+    </ul>
+      <button id="theme-toggle">☀️</button>
+    </nav>
+  </header>
+
+  <section id="home" class="hero">
+    <div class="hero-content">
+      <h1>ProperSett</h1>
+      <p class="subtitle">Motion tracked form correction. Your digital fitness coach.</p>
+      <div class="cta-buttons">
+        <a href="#cta" class="btn btn-primary">
+          <span class="btn-text">Download Now</span>
+          <i class="fas fa-download btn-icon"></i>
+        </a>
+        <a href="#features" class="btn btn-secondary">View Features</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="features">
+  <h2 class="section-title">Complete Training System</h2>
+  <div class="feature-row">
+
+    <!-- 1. Form Correction -->
+    <label class="feature-card red" for="fc-toggle">
+      <input type="checkbox" id="fc-toggle">
+      <i class="fas fa-user-check"></i>
+      <span>Form Correction</span>
+      <div class="feature-content">
+      <p>Helps improve your workout form to make exercises safer and more effective.</p>
+    </div>
+  </label>
+
+    <!-- 2. Workout Timers -->
+    <label class="feature-card blue" for="wt-toggle">
+      <input type="checkbox" id="wt-toggle">
+      <i class="fas fa-stopwatch"></i>
+      <span>Workout Timers</span>
+      <div class="feature-content">
+        <p>Built-in timers for workouts, rest periods, and interval training to keep you focused.</p>
+      </div>
+    </label>
+
+    <!-- 3. Progress Tracking -->
+    <label class="feature-card green" for="pt-toggle">
+      <input type="checkbox" id="pt-toggle">
+      <i class="fas fa-chart-line"></i>
+      <span>Progress Tracking</span>
+      <div class="feature-content">
+        <p>Easily track your workouts and see your fitness progress over time.</p>
+      </div>
+    </label>
+
+    <!-- 4. Planning -->
+    <label class="feature-card purple" for="pl-toggle">
+      <input type="checkbox" id="pl-toggle">
+      <i class="fas fa-calendar-alt"></i>
+      <span>Planning</span>
+      <div class="feature-content">
+        <p>Create and organize workout plans based on your goals and schedule.</p>
+      </div>
+    </label>
+
+  </div>
+</section>
+
+    <div class="divider"></div>
+    <section class="membership-perks">
+    <h2>Gym Membership Perks</h2>
+    <p>Offer ProperSett to members. Gym access + AI trainer. No personal training costs.</p>
+    <div class="cta-buttons">
+      <button class="appstore">App Store</button>
+      <button class="playstore">Play Store</button>
+    </div>
+  </section>
+
+  <script>
+  const toggle = document.getElementById('theme-toggle');
+  const body = document.body;
+  const header = document.querySelector('header');
+
+  function updateIcon() {
+    // Dark mode → sun, Light mode → moon
+    toggle.textContent = body.dataset.theme === 'dark' ? '☀️' : '🌙';
+  }
+  // fade effect sa header habang nag-scroll
+  window.addEventListener('scroll', () => {
+    const scrollTop = window.scrollY;
+    header.style.opacity = scrollTop > 50 ? "0.8" : "1";
+  });
+
+  // Mabagal smooth scroll to top (logo + Home)
+  function slowScrollTop() {
+    const scrollStep = -window.scrollY / 40;
+    const scrollInterval = setInterval(() => {
+      if (window.scrollY !== 0) {
+        window.scrollBy(0, scrollStep);
+      } else {
+        clearInterval(scrollInterval);
+      }
+    }, 15);
+  }
+
+  // ProperSett logo → scroll to top
+  const logo = document.querySelector('.logo');
+  if (logo) {
+    logo.addEventListener('click', e => {
+      e.preventDefault();
+      slowScrollTop();
+    });
+  }
+
+  // Home nav → scroll to top
+  const homeBtn = document.querySelector('a[href="#home"]');
+  if (homeBtn) {
+    homeBtn.addEventListener('click', e => {
+      e.preventDefault();
+      slowScrollTop();
+    });
+  }
+
+  // Features nav → scroll to features section
+  const featuresBtn = document.querySelector('a[href="#features"]');
+  if (featuresBtn) {
+    featuresBtn.addEventListener('click', e => {
+      e.preventDefault();
+      document.querySelector('#features').scrollIntoView({ behavior: 'smooth' });
+    });
+  }
+
+  // Gyms nav → scroll to gyms section
+  const gymsBtn = document.querySelector('a[href="#gyms"]');
+  if (gymsBtn) {
+    gymsBtn.addEventListener('click', e => {
+      e.preventDefault();
+      document.querySelector('#gyms').scrollIntoView({ behavior: 'smooth' });
+    });
+  }
+
+  // Download nav → scroll to CTA section
+  const downloadBtn = document.querySelector('a[href="#cta"]');
+  if (downloadBtn) {
+    downloadBtn.addEventListener('click', e => {
+      e.preventDefault();
+      document.querySelector('#cta').scrollIntoView({ behavior: 'smooth' });
+    });
+  }
+  toggle.addEventListener('click', () => {
+  const isDark = body.dataset.theme === 'dark';
+  body.dataset.theme = isDark ? 'light' : 'dark';
+  updateIcon();
+  });
+  </script>
+</body>
+</html>
